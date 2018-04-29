@@ -1,0 +1,6 @@
+/terraform.tfvars
+/myvpn.ovpn
+/terraform.tfstate*
+/cert/*.key
+/cert/*.pem
+/.terraform

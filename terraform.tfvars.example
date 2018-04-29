@@ -1,0 +1,5 @@
+aws_region = "eu-central-1"
+aws_profile = "default"
+domain = "foobar"
+public_key = "ssh-rsa AAA...== user@host"
+hostname = "myvpn"

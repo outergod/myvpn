@@ -1,0 +1,24 @@
+#cloud-config
+
+repo_update: true
+repo_upgrade: all
+
+fqdn: ${hostname}
+manage_etc_hosts: true
+
+runcmd:
+  - dnf install -y awscli openvpn firewalld
+  - aws s3 cp ${server_conf} /etc/openvpn/server/myvpn.conf
+  - systemctl enable openvpn-server@myvpn
+  - systemctl start openvpn-server@myvpn
+  - systemctl enable firewalld
+  - systemctl start firewalld
+  - firewall-cmd --new-zone=myvpn --permanent
+  - firewall-cmd --reload
+  - firewall-cmd --zone=external --add-service=openvpn
+  - firewall-cmd --zone=external --add-interface=eth0
+  - firewall-cmd --zone=myvpn --add-service=ssh
+  - firewall-cmd --zone=myvpn --add-interface=myvpn
+  - firewall-cmd --runtime-to-permanent
+
+output: { all: "| tee -a /var/log/cloud-init-output.log" }
